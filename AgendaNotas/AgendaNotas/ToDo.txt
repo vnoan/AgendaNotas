@@ -1,0 +1,9 @@
+﻿Coisas que faltam fazer:
+	- Após apertar o enter em um entry pular para o debaixo
+	- Salvar a alteração de uma nota/peso de uma prova 
+
+
+Coisas já feitas:
+	- Escrever os dados em um arquivo (testando)
+	- Ler os dados do arquivo (testando)
+		

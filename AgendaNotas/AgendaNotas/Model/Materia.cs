@@ -7,6 +7,7 @@ namespace AgendaNotas.Model
 {
     public class Materia : INotifyPropertyChanged
     {
+        //Properties
         public List<Nota> provas;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -24,7 +25,6 @@ namespace AgendaNotas.Model
             }
         }
         
-
         public float media
         {
          get
@@ -38,7 +38,8 @@ namespace AgendaNotas.Model
                 return aux1 / aux2;
             }      
         }
-   
+        
+        //Constructors
         public Materia(string nome)
         {
             this.provas = new List<Nota>();
@@ -55,6 +56,13 @@ namespace AgendaNotas.Model
             this.nome = nome;
         }
 
+        public Materia(string nome, List<Nota> provas)
+        {
+            this.provas = provas;
+            this.nome = nome;
+        }
+
+        //Methods
         public void addProva(float nota, int peso)
         {
             provas.Add(new Nota(nota, peso));
@@ -67,7 +75,7 @@ namespace AgendaNotas.Model
         }
 
     }
-    //Um trabalho é considerado uma prova !
+
     public class Nota
     {
         public float valor;

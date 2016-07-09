@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controller\Arquivos.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Materia.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\ListaMateriaVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\ListaMateriaPage.cs" />
@@ -19,6 +20,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)View\Tabbed.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Controller\" />
+    <Content Include="$(MSBuildThisFileDirectory)ToDo.txt" />
   </ItemGroup>
 </Project>
