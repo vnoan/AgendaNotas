@@ -28,7 +28,7 @@ namespace AgendaNotas.View
             vm = new ListaMateriaVM(this.Navigation);
             this.BindingContext = vm;
             ToolbarItems.Add(new ToolbarItem("+", null, addMateria));
-            ToolbarItems.Add(new ToolbarItem("-", null, removerMateria));
+            //ToolbarItems.Add(new ToolbarItem("-", null, removerMateria));
             
             
             layout = new StackLayout
@@ -39,20 +39,17 @@ namespace AgendaNotas.View
 
             Content = lvMaterias;
             Title = "Materias";
-            lvMaterias.ItemTemplate = template;
-            
 
+            lvMaterias.ItemTemplate = template;
+            lvMaterias.ItemSelected += ((sender, e) => lvMaterias.SelectedItem = null);
             lvMaterias.SetBinding(ListView.ItemsSourceProperty, "ListaMateria");
             lvMaterias.SetBinding(ListView.SelectedItemProperty, "materia");
-       
-            lvMaterias.IsPullToRefreshEnabled = true;
-
-            lvMaterias.ItemSelected += ((sender, e) => lvMaterias.SelectedItem = null);
-            
+          
         }
         
         void addMateria() { Navigation.PushAsync(new AddMateria()); }
-        void removerMateria() { Navigation.PushAsync(new RemoverMateria()); }
+        //void removerMateria() { Navigation.PushAsync(new RemoverMateria()); }
+        
     }
 
 }

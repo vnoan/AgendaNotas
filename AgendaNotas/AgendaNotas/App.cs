@@ -30,10 +30,11 @@ namespace AgendaNotas
             OnPropertyChanged();
         }
 
-        // Formato:
-        // nome = nota1@peso; nota2@peso2 /...
+
         protected override async void OnStart()
         {
+            // Formato:
+            // nome = nota1@peso; nota2@peso2 /...
             file = await Arquivos.LoadFile();
             string[] materias = await Arquivos.ReadOfFile(file);
             if (string.IsNullOrEmpty(materias[0]))
@@ -56,6 +57,8 @@ namespace AgendaNotas
 
         protected override async void OnSleep ()
 		{
+            // Formato:
+            // nome = nota1@peso; nota2@peso2 /...
             var toWrite = new string[Materias.Count];
             var i = 0;
             string notas;

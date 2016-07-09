@@ -19,6 +19,7 @@ namespace AgendaNotas.View
 
         public OperacaoMateria()
         {
+            
             Content = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
@@ -40,21 +41,26 @@ namespace AgendaNotas.View
                 }
             };
             BackgroundColor = Color.Gray;
+                 
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             eNome.Focus();
-            
-            
         }
 
     }
     
 	public class AddMateria : OperacaoMateria
     {
-        Entry qtNota = new Entry { Text = "1" };
+        Entry qtNota = new Entry { Text = "1", Keyboard = Keyboard.Numeric };
         public AddMateria() : base()
         {
             Title = "Adicionar Materias";
             grid.Children.Add(new Label { Text = "Quantidade de notas:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start }, 0, 0);
             grid.Children.Add(qtNota, 1, 0);
+
+            eNome.Completed += ((sender, e) => qtNota.Focus());
 
             bAction.Clicked += BAdd_Clicked;
             bAction.Text = "Adicionar Matéria";
@@ -77,7 +83,8 @@ namespace AgendaNotas.View
     
     }
 
-    public class RemoverMateria : OperacaoMateria
+    //Essa page nao faz sentido. 
+    /* public class RemoverMateria : OperacaoMateria
     {
         public RemoverMateria()
         {
@@ -100,6 +107,7 @@ namespace AgendaNotas.View
             lbLog.Text = "MATÉRIA NÃO REMOVIDA";
         }
     }
+    */
 
     public class EditarMateria : OperacaoMateria
     {
@@ -107,33 +115,51 @@ namespace AgendaNotas.View
         public EditarMateria(Materia m)
         {
             this.m = m;
+
             eNome.Text = m.nome;
+            eNome.Completed += ENome_Completed;
             Title = "Editar " + m.nome;
+
             bAction.Clicked += BConfirma_Clicked;
             bAction.Text = "Confirmar";
+
             ToolbarItems.Add(new ToolbarItem("+ Nota", null, addNota));
 
-            int left = 0;
             int top = 0;
             foreach(Nota p in m.provas)
             {
-                this.grid.Children.Add(new Label { Text = "Nota:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start }, left, top);
-                this.grid.Children.Add(new Entry { Text = p.valor.ToString(), Keyboard = Keyboard.Numeric }, left + 1, top);
-                this.grid.Children.Add(new Label { Text = "Peso:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start }, left+2, top);
-                this.grid.Children.Add(new Entry { Text = p.peso.ToString(), Keyboard = Keyboard.Numeric }, left+3, top);
+                grid.Children.Add(new Label { Text = "Nota:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start }, 0, top);
+                grid.Children.Add(new Entry { Text = p.valor.ToString(), Keyboard = Keyboard.Numeric }, 1, top);
+                grid.Children.Add(new Label { Text = "Peso:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start }, 2, top);
+                grid.Children.Add(new Entry { Text = p.peso.ToString(), Keyboard = Keyboard.Numeric }, 3, top);
+                grid.Children.Add(new Button { Text = "X"}, 4, top);
                 top++;
-
             }
             
         }
 
+
+        private void ENome_Completed(object sender, EventArgs e)
+        {
+            var v = grid.Children.First((ent) => ent.GetType() == typeof(Entry));
+            v.Focus();
+        }
+
         private void BConfirma_Clicked(object sender, EventArgs e)
         {
-            //Falta salvar as alterações que o usuário faz nas notas!
+            // Falta salvar as alterações que o usuário faz nas notas!
             var mat = App.Materias.First(mt => mt.nome == m.nome);
-
-            if (mat != null) { mat.nome = eNome.Text; }
+            // Testa o nome inserido
+            if (mat != null && !string.IsNullOrEmpty(eNome.Text)) { mat.nome = eNome.Text; }
             else { lbLog.Text = "NÃO EDITADO"; return;}
+
+            var entrys = grid.Children.Where((ent) => ent.GetType() == typeof(Entry));
+            // Testa as notas inseridas.
+            if (entrys.All((value) => { var v = (Entry)value; return string.IsNullOrEmpty(v.Text); }))
+            {
+                lbLog.Text = "NÃO EDITADO";
+                return;
+            }
 
             Navigation.PopToRootAsync();
         }
@@ -143,4 +169,5 @@ namespace AgendaNotas.View
             Navigation.PushAsync(new ProvasPage(m));
         }
     }
+
 }
