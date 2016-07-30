@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -12,6 +13,7 @@ namespace AgendaNotas.Model
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string _nome;
+        [PrimaryKey]
         public string nome
         {
             get
@@ -38,14 +40,17 @@ namespace AgendaNotas.Model
                 return aux1 / aux2;
             }      
         }
-        
+
         //Constructors
+        public Materia()
+        {
+
+        }
         public Materia(string nome)
         {
             this.provas = new List<Nota>();
             this.nome = nome;
         }
-
         public Materia(string nome, int qtNotas)
         {
             provas = new List<Nota>();
@@ -55,7 +60,6 @@ namespace AgendaNotas.Model
             }
             this.nome = nome;
         }
-
         public Materia(string nome, List<Nota> provas)
         {
             this.provas = provas;
@@ -71,22 +75,32 @@ namespace AgendaNotas.Model
 
         public override string ToString()
         {
-            return nome;
+            // Formato:
+            // nome = nota1@peso; nota2@peso2 /...
+            string str = nome + "=";
+            foreach (Nota n in provas)
+            {
+                str += n.valor + "@" + n.peso + ";" ;
+            }
+            return str;
         }
 
     }
 
     public class Nota
     {
+        //Atributos
+        [PrimaryKey, AutoIncrement]
+        private int id { get; set; }
         public float valor;
         public int peso;
 
+        //Construtores
         public Nota()
         {
             this.valor = 0;
             this.peso = 1;
         }
-
         public Nota (float valor, int peso)
         {
             this.valor = valor;

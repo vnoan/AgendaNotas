@@ -31,7 +31,10 @@ namespace AgendaNotas.ViewModel
         private Materia _materia;        
         public Materia materia
         {
-            get { return _materia; }
+            get
+            {
+                return _materia;
+            }
             set
             {
                 _materia = value;

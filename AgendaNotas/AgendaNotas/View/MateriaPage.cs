@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AgendaNotas.Model;
+using AgendaNotas.ViewModel;
 using Xamarin.Forms;
 
 namespace AgendaNotas.View
@@ -15,39 +16,27 @@ namespace AgendaNotas.View
         StackLayout info = new StackLayout();
 
         public MateriaPage (Materia mt)
-		{
+        {
             m = mt;
-            ToolbarItems.Add(new ToolbarItem("Remover", null, removerMateria));
-            ToolbarItems.Add(new ToolbarItem("Provas", null, addNota));
+            BindingContext = new MateriaPageVM(m, Navigation, this);
 
-            layout.Children.Add(new Label { Text = "Nome: " + m.ToString() });
+            var remove = new ToolbarItem("Remover",null, null);
+            var provas = new ToolbarItem("Provas", null, null);
+            remove.SetBinding(ToolbarItem.CommandProperty, "removerMateria");
+            provas.SetBinding(ToolbarItem.CommandProperty, "addNota");
+            
+            ToolbarItems.Add(remove);
+            ToolbarItems.Add(provas);
+            
+            layout.Children.Add(new Label { Text = "Nome: " + m.nome });
             layout.Children.Add(info);
             layout.Children.Add(bEditar);
 
-            bEditar.Clicked += editarMateria;
+            bEditar.SetBinding(Button.CommandProperty, "editarMateria");
+
             Padding = 30;
             Content = layout;
 		}
-
-        private void addNota()
-        {
-            Navigation.PushAsync(new ProvasPage(m));
-        }
-
-        private void editarMateria(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new EditarMateria(m));
-        }
-
-        async void removerMateria()
-        {
-            bool go = await DisplayAlert("Remoção", "Tem certeza que quer remover esta matéria?", "Sim", "Não");
-            if (go)
-            {
-                App.Materias.Remove(m);
-                await Navigation.PopAsync();
-            }
-        }
 
         protected override void OnAppearing()
         {

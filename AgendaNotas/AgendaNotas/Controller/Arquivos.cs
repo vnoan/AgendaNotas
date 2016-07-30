@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using PCLStorage;
+using System.Diagnostics;
 
 namespace AgendaNotas.Controller
 {
@@ -12,7 +13,7 @@ namespace AgendaNotas.Controller
         {
             IFolder rootFolder = FileSystem.Current.LocalStorage;
             IFolder folder = await rootFolder.CreateFolderAsync("AgendaNotasFiles", CreationCollisionOption.OpenIfExists);
-            IFile file = await folder.CreateFileAsync("materias.txt", CreationCollisionOption.ReplaceExisting);
+            IFile file = await folder.CreateFileAsync("materias.txt", CreationCollisionOption.OpenIfExists);
             return file;
         }
 
@@ -24,9 +25,19 @@ namespace AgendaNotas.Controller
         
         public static async Task<string[]> ReadOfFile(IFile file)
         {
-            string textoFromArq= await file.ReadAllTextAsync();
-            string[] splited = textoFromArq.Split('/');
-            return splited;
+            string textoFromArq = await file.ReadAllTextAsync();
+            try
+            {
+                string[] splited = textoFromArq.Split('/');
+                return splited;
+            }
+            catch(IndexOutOfRangeException e)
+            {
+
+                Debug.Write(textoFromArq);
+            }
+            return null;
+
         }
 
     }

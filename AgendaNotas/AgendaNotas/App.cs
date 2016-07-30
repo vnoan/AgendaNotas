@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ using AgendaNotas.Controller;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using PCLStorage;
+using SQLite;
 using System.Diagnostics;
 
 namespace AgendaNotas
@@ -15,7 +17,7 @@ namespace AgendaNotas
 	public class App : Application
 	{
         public static ObservableCollection<Materia> Materias = new ObservableCollection<Materia>();
-        private IFile file;
+        private SQLiteConnection _db;
 
 		public App ()
 		{
@@ -27,51 +29,40 @@ namespace AgendaNotas
 
         private void Materias_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged();
+            foreach(Materia m in e.NewItems)
+            {
+                _db.InsertOrReplace(m);
+            }
         }
 
-
-        protected override async void OnStart()
+        protected override void OnStart()
         {
-            // Formato:
-            // nome = nota1@peso; nota2@peso2 /...
-            file = await Arquivos.LoadFile();
-            string[] materias = await Arquivos.ReadOfFile(file);
-            if (string.IsNullOrEmpty(materias[0]))
-                return;
-            foreach(string s in materias)
+            var sqliteFilename = "DBAgendaNotas";
+            #if __ANDROID__
+                //Just use whatever directory SpecialFolder.Personal returns
+                string libraryPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            #else
+                // we need to put in /Library/ on iOS5.1 to meet Apple's iCloud terms
+                // (they don't want non-user-generated data in Documents)
+                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal); // Documents folder
+                string libraryPath = Path.Combine(documentsPath, "..", "Library"); // Library folder instead
+            #endif
+            var path = Path.Combine(libraryPath, sqliteFilename);
+
+            _db = new SQLiteConnection(path);
+            _db.CreateTable<Materia>();
+
+            foreach (Materia m in _db.Table<Materia>())
             {
-                var provas = new List<Nota>();
-                var materiaSplitted = s.Split('=');
-                var notasSplitted = materiaSplitted[1].Split(';');     
-                foreach(string nota in notasSplitted)
-                {
-                    var str = nota.Split('@');
-                    provas.Add(new Nota(float.Parse(str[0]), int.Parse(str[1])));
-                }
-                Materias.Add(new Materia(materiaSplitted[0],provas));
+                Materias.Add(m);
             }
             
-
         }
+        
 
-        protected override async void OnSleep ()
+        protected override void OnSleep ()
 		{
-            // Formato:
-            // nome = nota1@peso; nota2@peso2 /...
-            var toWrite = new string[Materias.Count];
-            var i = 0;
-            string notas;
-            foreach (Materia m in Materias)
-            {
-                notas = string.Empty;
-                foreach(Nota n in m.provas)
-                {
-                    notas += n.valor + "@" + n.peso + ";";
-                }
-                toWrite[i] = m.nome + "=" + notas;
-            }
-            await Arquivos.WriteOnFile(file, toWrite);
+
 		}
 
 		protected override void OnResume ()

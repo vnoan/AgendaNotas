@@ -28,8 +28,6 @@ namespace AgendaNotas.View
             vm = new ListaMateriaVM(this.Navigation);
             this.BindingContext = vm;
             ToolbarItems.Add(new ToolbarItem("+", null, addMateria));
-            //ToolbarItems.Add(new ToolbarItem("-", null, removerMateria));
-            
             
             layout = new StackLayout
             {

@@ -83,32 +83,6 @@ namespace AgendaNotas.View
     
     }
 
-    //Essa page nao faz sentido. 
-    /* public class RemoverMateria : OperacaoMateria
-    {
-        public RemoverMateria()
-        {
-            Title = "Remover Materias";
-            bAction.Clicked += BRemove_Clicked;
-            bAction.Text = "Remover Matéria";
-        }
-
-        private void BRemove_Clicked(object sender, EventArgs e)
-        {
-            foreach (Materia m in App.Materias)
-            {
-                if (m.nome.ToLower().Trim() == eNome.Text.ToLower().Trim())
-                {
-                    App.Materias.Remove(m);
-                    Navigation.PopToRootAsync();
-                    return;
-                }
-            }
-            lbLog.Text = "MATÉRIA NÃO REMOVIDA";
-        }
-    }
-    */
-
     public class EditarMateria : OperacaoMateria
     {
         Materia m;
@@ -149,11 +123,13 @@ namespace AgendaNotas.View
         {
             // Falta salvar as alterações que o usuário faz nas notas!
             var mat = App.Materias.First(mt => mt.nome == m.nome);
+
             // Testa o nome inserido
             if (mat != null && !string.IsNullOrEmpty(eNome.Text)) { mat.nome = eNome.Text; }
             else { lbLog.Text = "NÃO EDITADO"; return;}
 
             var entrys = grid.Children.Where((ent) => ent.GetType() == typeof(Entry));
+
             // Testa as notas inseridas.
             if (entrys.All((value) => { var v = (Entry)value; return string.IsNullOrEmpty(v.Text); }))
             {
