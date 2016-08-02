@@ -9,12 +9,28 @@ namespace AgendaNotas.Model
     public class Materia : INotifyPropertyChanged
     {
         //Properties
-        public List<Nota> provas;
+        
         public event PropertyChangedEventHandler PropertyChanged;
+        public static int LastId;
+        [Ignore]
+        public List<Nota> Provas { get; set; }
+
+        private int _id;
+        [PrimaryKey, AutoIncrement]
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
+        }
 
         private string _nome;
-        [PrimaryKey]
-        public string nome
+        public string Nome
         {
             get
             {
@@ -26,16 +42,17 @@ namespace AgendaNotas.Model
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("nome"));
             }
         }
-        
-        public float media
+
+        [Ignore]
+        public float Media
         {
          get
             {
                 float aux1 = 0, aux2 = 0;
-                foreach(Nota p in provas)
+                foreach(Nota p in Provas)
                 {
-                    aux1 += (p.valor * p.peso);
-                    aux2 += p.peso;
+                    aux1 += (p.Valor * p.Peso);
+                    aux2 += p.Peso;
                 }
                 return aux1 / aux2;
             }      
@@ -44,73 +61,63 @@ namespace AgendaNotas.Model
         //Constructors
         public Materia()
         {
+            Materia.LastId += 1;
+            this.Id = Materia.LastId;
 
         }
         public Materia(string nome)
         {
-            this.provas = new List<Nota>();
-            this.nome = nome;
+            Materia.LastId += 1;
+            this.Id = Materia.LastId;
+            this.Provas = new List<Nota>();
+            this.Nome = nome;
         }
         public Materia(string nome, int qtNotas)
         {
-            provas = new List<Nota>();
+            Materia.LastId += 1;
+            this.Id = Materia.LastId;
+            this.Provas = new List<Nota>();
             for (int i = 0; i < qtNotas; i++)
             {
-                provas.Add(new Nota());
+                Provas.Add(new Nota(_id));
             }
-            this.nome = nome;
+            this.Nome = nome;
+
         }
         public Materia(string nome, List<Nota> provas)
         {
-            this.provas = provas;
-            this.nome = nome;
-        }
+            Materia.LastId += 1;
+            this.Id = Materia.LastId;
+            this.Provas = provas;
+            this.Nome = nome;
+       }
 
         //Methods
-        public void addProva(float nota, int peso)
+        public void AddProva(float valor, int peso)
         {
-            provas.Add(new Nota(nota, peso));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("provas"));
+            Nota n = new Nota(valor, peso, _id);
+            
+            //Quando eu add uma prova, a coleção nao altera, logo não salva no DB.
+            Provas.Add(n);
+            App.AddNota(n);     //Isso add a nota no DB
+            
+            //Avisa que houve alteração nas propriedades. 
+            //A priori, Provas não é usado em outro lugar que requer este aviso
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Provas"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Media"));
         }
-
         public override string ToString()
         {
             // Formato:
             // nome = nota1@peso; nota2@peso2 /...
-            string str = nome + "=";
-            foreach (Nota n in provas)
+            string str = Nome + "=";
+            foreach (Nota n in Provas)
             {
-                str += n.valor + "@" + n.peso + ";" ;
+                str += n.Valor + "@" + n.Peso + ";" ;
             }
             return str;
         }
 
     }
-
-    public class Nota
-    {
-        //Atributos
-        [PrimaryKey, AutoIncrement]
-        private int id { get; set; }
-        public float valor;
-        public int peso;
-
-        //Construtores
-        public Nota()
-        {
-            this.valor = 0;
-            this.peso = 1;
-        }
-        public Nota (float valor, int peso)
-        {
-            this.valor = valor;
-            this.peso = peso;
-        }
-    }
-
-
-
-    
-
     
 }

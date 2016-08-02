@@ -6,12 +6,21 @@ using AgendaNotas;
 using AgendaNotas.Model;
 using AgendaNotas.View;
 using Xamarin.Forms;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace AgendaNotas.ViewModel
 {
     public class MateriaPageVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public ObservableCollection<Materia> ListaMateria
+        {
+            get
+            {
+                return App.Materias;
+            }
+        }
         private Materia _materia;
         private INavigation _nav;
         private Page _page;
@@ -23,7 +32,7 @@ namespace AgendaNotas.ViewModel
             _page = p;
         }
 
-        private async void removerMateria()
+        public async void RemoverMateria()
         {
             bool go = await _page.DisplayAlert("Remoção", "Tem certeza que quer remover esta matéria?", "Sim", "Não");
             if (go)
@@ -32,15 +41,13 @@ namespace AgendaNotas.ViewModel
                 await _nav.PopAsync();
             }
         }
-
-        private async void addNota()
+        public async void AddNota()
         {
-            await _nav.PushAsync(new ProvasPage(_materia));
+            await _nav.PushAsync(new AddNotasPage(_materia));
         }
-
-        private async void editarMateria(object sender, EventArgs e)
+        public async void EditarMateria(object sender, EventArgs e)
         {
-            await _nav.PushAsync(new EditarMateria(_materia));
+            await _nav.PushAsync(new EditarMateriaPage(_materia));
         }
 
 

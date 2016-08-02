@@ -10,46 +10,46 @@ namespace AgendaNotas.View
 {
 	public class MateriaPage : ContentPage
 	{
-        Materia m;
-        Button bEditar = new Button { Text = "Editar Matéria" };
-        StackLayout layout = new StackLayout();
-        StackLayout info = new StackLayout();
+        private Materia _materia;
+        private Button BEditar = new Button { Text = "Editar Matéria" };
+        private StackLayout _layout = new StackLayout();
+        private StackLayout _info = new StackLayout();
+        private MateriaPageVM _vm;
 
         public MateriaPage (Materia mt)
         {
-            m = mt;
-            BindingContext = new MateriaPageVM(m, Navigation, this);
+            _materia = mt;
+            _vm = new MateriaPageVM(_materia, Navigation, this);
 
-            var remove = new ToolbarItem("Remover",null, null);
-            var provas = new ToolbarItem("Provas", null, null);
-            remove.SetBinding(ToolbarItem.CommandProperty, "removerMateria");
-            provas.SetBinding(ToolbarItem.CommandProperty, "addNota");
+            var tbiRemover = new ToolbarItem("Remover", null, _vm.RemoverMateria);
+            var tbiProvas = new ToolbarItem("Provas", null, _vm.AddNota);
             
-            ToolbarItems.Add(remove);
-            ToolbarItems.Add(provas);
+            ToolbarItems.Add(tbiRemover);
+            ToolbarItems.Add(tbiProvas);
             
-            layout.Children.Add(new Label { Text = "Nome: " + m.nome });
-            layout.Children.Add(info);
-            layout.Children.Add(bEditar);
+            _layout.Children.Add(new Label { Text = "Nome: " + _materia.Nome });
+            _layout.Children.Add(_info);
+            _layout.Children.Add(BEditar);
 
-            bEditar.SetBinding(Button.CommandProperty, "editarMateria");
+            BEditar.Clicked += _vm.EditarMateria;
 
-            Padding = 30;
-            Content = layout;
-		}
+            Padding = 10;
+            Content = _layout;
+            this.BindingContext = _vm;
+        }
 
         protected override void OnAppearing()
         {
-            info.Children.Clear();
+            _info.Children.Clear();
             int contador = 1;
-            foreach(Nota p in m.provas)
+            foreach(Nota p in _materia.Provas)
             {
-                info.Children.Add(new Label { Text = "nota " + contador.ToString() + " : " + p.valor.ToString() + " (" + p.peso.ToString() + ")" });
+                _info.Children.Add(new Label { Text = "nota " + contador.ToString() + " : " + p.Valor.ToString() + " (" + p.Peso.ToString() + ")" });
                 contador++;
             }
 
-            info.Children.Add(new Label {   Text = m.media == 0 ? "--" : m.media.ToString(),
-                                            TextColor = m.media > 6 ? Color.Green : Color.Red });
+            _info.Children.Add(new Label {   Text = _materia.Media == 0 ? "--" : _materia.Media.ToString(),
+                                            TextColor = _materia.Media > 6 ? Color.Green : Color.Red });
         }
 	}
 }

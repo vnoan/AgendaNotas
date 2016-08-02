@@ -15,6 +15,7 @@ namespace AgendaNotas.View
             materias = new ListaMateriaPage();
             Children.Add(materias);
             Title = "Notas";
+            
 		}
 	}
 }

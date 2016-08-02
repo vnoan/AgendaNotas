@@ -10,14 +10,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controller\Arquivos.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Materia.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Nota.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\MateriaPageVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\ListaMateriaVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\ListaMateriaPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\MateriaPage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View\OperacaoMateria.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\AddNotasPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View\OperacoesPages\AddMateriaPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View\OperacoesPages\EditarMateriaPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View\OperacoesPages\OperacaoMateria.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\Tabbed.cs" />
   </ItemGroup>
   <ItemGroup>

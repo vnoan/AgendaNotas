@@ -11,25 +11,29 @@ namespace AgendaNotas.View
 {
     public class ListaMateriaPage : ContentPage
     {
-        StackLayout layout;
-        ListaMateriaVM vm;
-        ListView lvMaterias = new ListView();
-        DataTemplate template = new DataTemplate(() =>
+        private StackLayout _layout;
+        private ListaMateriaVM _vm;
+        private ListView lvMaterias = new ListView();
+        private DataTemplate template = new DataTemplate(() =>
         {
             StackLayout stack = new StackLayout { Orientation = StackOrientation.Horizontal };
-            Label lbNome = new Label { TextColor = Color.White };
-            lbNome.SetBinding(Label.TextProperty, "nome");
+            Label lbNome = new Label { TextColor = Color.White, FontSize = 17, VerticalOptions = LayoutOptions.Center };
+            Label lbMedia = new Label { HorizontalOptions = LayoutOptions.EndAndExpand, VerticalOptions = LayoutOptions.Center };
+            lbNome.SetBinding(Label.TextProperty, "Nome");
+            lbMedia.SetBinding(Label.TextProperty, "Media");
             stack.Children.Add(lbNome);
+            stack.Children.Add(lbMedia);
             return new ViewCell { View = stack };
         });
         
         public ListaMateriaPage()
         {
-            vm = new ListaMateriaVM(this.Navigation);
-            this.BindingContext = vm;
-            ToolbarItems.Add(new ToolbarItem("+", null, addMateria));
+            _vm = new ListaMateriaVM(this.Navigation);
+            BindingContext = _vm;
+            Padding = 10;
+            ToolbarItems.Add(new ToolbarItem("+", null, _vm.AddMateria));
             
-            layout = new StackLayout
+            _layout = new StackLayout
             {
                 HorizontalOptions = LayoutOptions.CenterAndExpand,
                 Children = {lvMaterias}
@@ -45,8 +49,6 @@ namespace AgendaNotas.View
           
         }
         
-        void addMateria() { Navigation.PushAsync(new AddMateria()); }
-        //void removerMateria() { Navigation.PushAsync(new RemoverMateria()); }
         
     }
 

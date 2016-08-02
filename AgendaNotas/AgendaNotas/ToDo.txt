@@ -1,2 +1,3 @@
 ﻿Coisas que faltam fazer:
 	- Salvar a alteração de uma nota/peso de uma prova 
+	- Salvar as notas no BD

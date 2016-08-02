@@ -21,14 +21,9 @@ namespace AgendaNotas.ViewModel
         }
 
         INavigation Nav;
-        public ListaMateriaVM(INavigation nav)
-        {
-            Nav = nav;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private Materia _materia;        
+        private Materia _materia;
         public Materia materia
         {
             get
@@ -38,7 +33,7 @@ namespace AgendaNotas.ViewModel
             set
             {
                 _materia = value;
-                Debug.Write("PEGANDO A MATERIA " + (_materia  == null ? "vazia" : _materia.nome));
+                Debug.Write("PEGANDO A MATERIA " + (_materia == null ? "vazia" : _materia.Nome));
                 if (value != null)
                 {
                     Nav.PushAsync(new MateriaPage(materia));
@@ -47,5 +42,11 @@ namespace AgendaNotas.ViewModel
             }
         }
 
+        public ListaMateriaVM(INavigation nav)
+        {
+            Nav = nav;
+        }
+        
+        public void AddMateria() { Nav.PushAsync(new AddMateriaPage()); }
     }
 }
