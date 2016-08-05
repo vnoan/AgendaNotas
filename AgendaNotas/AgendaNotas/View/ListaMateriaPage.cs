@@ -28,7 +28,8 @@ namespace AgendaNotas.View
         
         public ListaMateriaPage()
         {
-            _vm = new ListaMateriaVM(this.Navigation);
+
+            _vm = new ListaMateriaVM(Navigation);
             BindingContext = _vm;
             Padding = 10;
             ToolbarItems.Add(new ToolbarItem("+", null, _vm.AddMateria));
@@ -45,8 +46,8 @@ namespace AgendaNotas.View
             lvMaterias.ItemTemplate = template;
             lvMaterias.ItemSelected += ((sender, e) => lvMaterias.SelectedItem = null);
             lvMaterias.SetBinding(ListView.ItemsSourceProperty, "ListaMateria");
-            lvMaterias.SetBinding(ListView.SelectedItemProperty, "materia");
-          
+            lvMaterias.SetBinding(ListView.SelectedItemProperty, "Materia");
+            
         }
         
         

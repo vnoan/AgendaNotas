@@ -1,3 +1,6 @@
 ﻿Coisas que faltam fazer:
-	- Salvar a alteração de uma nota/peso de uma prova 
-	- Salvar as notas no BD
+	- Colocar para funcionar o botão com X no EditarMateria
+	- Alterar o Icone
+	- Alterar as cores.
+	- Testar bastante. Aparentemente o APP tá completo.
+	

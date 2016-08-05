@@ -22,10 +22,12 @@ namespace AgendaNotas
 		public App ()
 		{
             // The root page of your application
-            var tab = new Tabbed();
-            MainPage = new NavigationPage(tab);
 
-		}
+            //var tab = new Tabbed();
+            //MainPage = new NavigationPage(tab);
+            var nav = new NavigationPage(new ListaMateriaPage());
+            MainPage = nav;
+        }
 
         private void Materias_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
